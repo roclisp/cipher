@@ -20,3 +20,8 @@
   (is (= enumerated-1 (enumerate normalized-1)))
   (is (= enumerated-2 (enumerate normalized-2)))
   (is (empty? (enumerate []))))
+
+(deftest test-denumerate
+  (is (= normalized-1 (denumerate enumerated-1)))
+  (is (= normalized-2 (denumerate enumerated-2)))
+  (is (empty? (denumerate []))))
