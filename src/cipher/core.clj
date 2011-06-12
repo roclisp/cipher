@@ -9,12 +9,10 @@
     s))
 
 (defn step-1 [msg]
-  (let [msg2 (-> msg
+  (let [bare (-> msg
                  .toUpperCase
                  (.replaceAll "[^A-Z]" ""))
-        parts (map join (partition-all 5 msg2))]
-    (concat
-     (butlast parts)
-     [(pad (last parts) 5 "X")])))
-
+        pad-len (* 5 (Math/ceil (/ (count bare) 5))) ;round up to nearest 5
+        padded (pad bare pad-len \X)]
+    (map join (partition 5 padded))))
 
