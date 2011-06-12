@@ -22,6 +22,10 @@
   (for [group msg]
     (map #(- (int %) 64) group)))
 
+(defn denumerate [enum-msg]
+  (for [group enum-msg]
+    (join (map #(char (+ % 64)) group))))
+
 (defn combine [enum-msg enum-ks]
   (letfn [(add [a b]
             (let [result (+ a b)]
@@ -32,13 +36,8 @@
            (map add g1 g2))
          enum-msg enum-ks)))
 
-(defn denumerate [enum-msg]
-  (join " "
-   (for [group enum-msg]
-     (join (map #(char (+ % 64)) group)))))
-
 (defn encode [msg]
   (let [norm-msg (normalize msg)
         enum-msg (enumerate norm-msg)
         enum-ks (enumerate (key-stream norm-msg))]
-    (denumerate (combine enum-msg enum-ks))))
+    (join " " (denumerate (combine enum-msg enum-ks)))))
