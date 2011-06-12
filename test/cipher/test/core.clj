@@ -27,13 +27,19 @@
   (is (empty? (denumerate []))))
 
 (deftest test-card->letter
-  (is (= 1 \A))
-  (is (= 2 \B))
-  (is (= 26 \Z))
-  (is (= 27 \A))
-  (is (= 28 \B))
-  (is (= 52 \Z)))
+  (is (= (card->letter 1) \A))
+  (is (= (card->letter 2) \B))
+  (is (= (card->letter 26) \Z))
+  (is (= (card->letter 27) \A))
+  (is (= (card->letter 28) \B))
+  (is (= (card->letter 52) \Z)))
 
 (deftest test-move-down
-  (is (= (move-down [1 2 :a 3  4] :a)
-                    [1 2 3  :a 4])))
+  (is (= (move-down [1  2  :a 3  4] :a)
+                    [1  2  3  :a 4]))
+
+  (is (= (move-down [1  2  3  :a 4] :a)
+                    [1  2  3  4  :a]))
+
+  (is (= (move-down [1  2  3  4  :a] :a)
+                    [1  :a 2  3  4])))
