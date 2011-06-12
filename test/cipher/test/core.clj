@@ -25,3 +25,15 @@
   (is (= normalized-1 (denumerate enumerated-1)))
   (is (= normalized-2 (denumerate enumerated-2)))
   (is (empty? (denumerate []))))
+
+(deftest test-card->letter
+  (is (= 1 \A))
+  (is (= 2 \B))
+  (is (= 26 \Z))
+  (is (= 27 \A))
+  (is (= 28 \B))
+  (is (= 52 \Z)))
+
+(deftest test-move-down
+  (is (= (move-down [1 2 :a 3  4] :a)
+                    [1 2 3  :a 4])))
