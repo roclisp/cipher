@@ -1,14 +1,13 @@
-(ns cipher.core)
+(ns cipher.core
+  (:use [clojure.string :only [join]]))
 
-(defn- join [coll]
-  (apply str coll))
 
 (defn- pad [s n filler]
   (if (> n (count s))
     (str s (join (repeat (- n (count s)) filler)))
     s))
 
-(defn step-1 [msg]
+(defn normalize [msg]
   (let [bare (-> msg
                  .toUpperCase
                  (.replaceAll "[^A-Z]" ""))
@@ -16,3 +15,30 @@
         padded (pad bare pad-len \X)]
     (map join (partition 5 padded))))
 
+(defn key-stream [msg]
+  msg)
+
+(defn enumerate [msg]
+  (for [group msg]
+    (map #(- (int %) 64) group)))
+
+(defn combine [enum-msg enum-ks]
+  (letfn [(add [a b]
+            (let [result (+ a b)]
+              (if (> result 26)
+                (- result 26)
+                result)))]
+    (map (fn [g1 g2]
+           (map add g1 g2))
+         enum-msg enum-ks)))
+
+(defn denumerate [enum-msg]
+  (join " "
+   (for [group enum-msg]
+     (join (map #(char (+ % 64)) group)))))
+
+(defn encode [msg]
+  (let [norm-msg (normalize msg)
+        enum-msg (enumerate norm-msg)
+        enum-ks (enumerate (key-stream norm-msg))]
+    (denumerate (combine enum-msg enum-ks))))
